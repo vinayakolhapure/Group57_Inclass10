@@ -76,7 +76,7 @@ public class SignupFragment extends Fragment {
 
         editTextEmail = (EditText) getActivity().findViewById(R.id.etSignupEmail);
         editTextName = (EditText) getActivity().findViewById(R.id.editTextName);
-        editTextPass = (EditText) getActivity().findViewById(R.id.editTextPwd);
+        editTextPass = (EditText) getActivity().findViewById(R.id.etSignupPwd);
         buttonSignup = (Button) getActivity().findViewById(R.id.buttonSignup);
         buttonCancel = (Button) getActivity().findViewById(R.id.buttonCancel);
 
@@ -107,19 +107,19 @@ public class SignupFragment extends Fragment {
                             user.setFullName(name);
                             user.setEmail(email);
                             user.setPassword(password);
-                            mDatabase.child("users").child("username").setValue(user.getFullName());
-                            mDatabase.child("users").child("email").setValue(user.getEmail());
-                            mDatabase.child("users").child("password").setValue(user.getPassword());
+                            String uid = mAuth.getCurrentUser().getUid();
+                            mDatabase.child("users").child(uid).child("fullname").setValue(user.getFullName());
+                            mDatabase.child("users").child(uid).child("email").setValue(user.getEmail());
+                            mDatabase.child("users").child(uid).child("password").setValue(user.getPassword());
+                            mListener.onSignupInteraction();
                         } else {
                             Log.d("demo", task.getException().toString());
                         }
-
                     }
                 });
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onSignupInteraction();
     }
 }

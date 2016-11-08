@@ -9,5 +9,6 @@
     <string name="email">Email</string>
     <string name="full_name">Full Name</string>
     <string name="login">Login</string>
-    <string name="current_expenses">Current Expense</string>
+    <string name="current_expenses">Current Expenses:</string>
+    <string name="logout">LogOut</string>
 </resources>

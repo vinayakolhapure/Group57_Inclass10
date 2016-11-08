@@ -23,42 +23,43 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
         if(firebaseUser != null) {
-            getFragmentManager().beginTransaction().replace(R.id.container,new ExpensesList(),"expense_add").addToBackStack(null).commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container,new ExpensesList(),"expense_list")
+                    .addToBackStack(null)
+                    .commit();
         } else {
-            getSupportFragmentManager().beginTransaction().add(R.id.container, new LoginActivity(), "login_fragment").commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, new LoginActivity(), "login_fragment")
+                    .commit();
         }
-        /*mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    getFragmentManager().beginTransaction().replace(R.id.mainContainer,new AddExpense(),"expense_add").addToBackStack(null).commit();
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, new LoginActivity(), "login_fragment").commit();
-                }
-            }
-        };*/
+    }
+
+    @Override
+    public void onClickSignUp() {
+        getFragmentManager().popBackStack();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new SignupFragment(), "signup_fragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToExpenseList() {
+        getFragmentManager().popBackStack();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new ExpensesList(), "expense_list")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onSignupInteraction() {
-
-    }
-
-    @Override
-    public void onLoginFragmentInteraction(String name, String uname) {
-        if(name.equals("sign_up"))
-        {
-            Log.d("Main Activity","In signup");
-            getFragmentManager().beginTransaction().replace(R.id.container, new SignupFragment(), "signup_fragment").addToBackStack(null).commit();
-        }
-
-        else if(name.equals("expesne_list")) {
-           getFragmentManager().beginTransaction().replace(R.id.container, new ExpensesList(), "expesne_list").addToBackStack(null).commit();
-        }
+        getFragmentManager().popBackStack();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new ExpensesList(), "expense_list")
+                .addToBackStack(null)
+                .commit();
     }
 }

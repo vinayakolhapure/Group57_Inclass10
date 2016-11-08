@@ -2,12 +2,15 @@ package com.example.vinayak.group57_inclass10;
 
 
 import android.app.Activity;
+import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.firebase.ui.FirebaseListAdapter;
@@ -33,6 +36,8 @@ public class ExpensesList extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String userId = null;
+    private ImageButton imageAdd;
+    private Button logoutButton;
 
     private ArrayList<Expense> expensesList;
     Expense expense;
@@ -74,6 +79,8 @@ public class ExpensesList extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         lv = (ListView) getActivity().findViewById(R.id.listView);
+        imageAdd = (ImageButton) getActivity().findViewById(R.id.imageAdd);
+        logoutButton = (Button) getActivity().findViewById(R.id.buttonLogout);
         mAuth = FirebaseAuth.getInstance();
         expensesList = new ArrayList<Expense>();
 
@@ -90,31 +97,6 @@ public class ExpensesList extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String value = dataSnapshot.getValue(String.class);
-                switch (dataSnapshot.getKey()) {
-                    case "eAmount":
-                        expense.setAmount(value);
-                        break;
-                    case "eCategory":
-                        expense.setCategory(value);
-                        break;
-                    case "eDate":
-                        expense.setDate(value);
-                        break;
-                    case "eID":
-                        expense.setId(value);
-                        break;
-                    case "eName":
-                        expense.setName(value);
-                        break;
-                }
-                if((expense.getName()!=null && !expense.getName().isEmpty()) && (expense.getAmount()!=null && !expense.getAmount().isEmpty())
-                        && (expense.getDate()!=null && !expense.getDate().isEmpty()) &&
-                        (expense.getCategory()!=null && !expense.getCategory().isEmpty()) &&
-                        (expense.getId()!=null && !expense.getId().isEmpty())) {
-                    expensesList.add(expense);
-                    Log.d("demo",expense.toString());
-                    adapter.notifyDataSetChanged();
-                }
                 //expensesList.add(expense);
             }
 
@@ -136,6 +118,13 @@ public class ExpensesList extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
             }
         });
 
