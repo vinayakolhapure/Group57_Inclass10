@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener,
         LoginActivity.OnLoginFragmentInteractionListener, ExpensesList.OnFragmentInteractionListener,
-        AddFragment.OnFragmentInteractionListener{
+        AddFragment.OnFragmentInteractionListener, ExpenseDetails.OnFragmentInteractionListener {
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
@@ -82,5 +82,10 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+
     }
 }

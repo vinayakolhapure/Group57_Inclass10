@@ -1,9 +1,11 @@
 package com.example.vinayak.group57_inclass10;
 
+import java.io.Serializable;
+
 /**
  * Created by Vinayak on 11/7/2016.
  */
-public class Expense {
+public class Expense implements Serializable{
 
     String id;
     String user;

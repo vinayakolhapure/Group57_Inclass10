@@ -2,6 +2,7 @@ package com.example.vinayak.group57_inclass10;
 
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.media.Image;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -128,6 +130,29 @@ public class ExpensesList extends Fragment {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Fragment f = new ExpenseDetails();
+                    android.app.FragmentManager f1 = getFragmentManager();
+                    Expense e = expensesList.get(position);
+                    FragmentTransaction ft = f1.beginTransaction();
+                    Bundle args = new Bundle();
+                    args.putSerializable("expense", e);
+                    f.setArguments(args);
+                    ft.replace(R.id.container, f);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            });
+
+            lv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
                 }
             });
 
