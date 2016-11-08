@@ -11,4 +11,19 @@
     <string name="login">Login</string>
     <string name="current_expenses">Current Expenses:</string>
     <string name="logout">LogOut</string>
+    <string name="add_exp">Add Expense</string>
+    <string name="exp_name">Expense Name</string>
+    <string name="category">Category</string>
+    <string name="amount">Amount</string>
+    <string name="add_button">Add Expense</string>
+    <array name="category_spinner">
+        <item name="groceries">Groceries</item>
+        <item name="invoice">Invoice</item>
+        <item name="transportation">Transportation</item>
+        <item name="shopping">Shopping</item>
+        <item name="rent">Rent</item>
+        <item name="trips">Trips</item>
+        <item name="utilities">Utilities</item>
+        <item name="other">Other</item>
+    </array>
 </resources>

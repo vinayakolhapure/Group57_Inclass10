@@ -21,9 +21,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -40,7 +42,6 @@ public class ExpensesList extends Fragment {
     private Button logoutButton;
 
     private ArrayList<Expense> expensesList;
-    Expense expense;
     public ExpensesList() {
         // Required empty public constructor
     }
@@ -73,60 +74,70 @@ public class ExpensesList extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onSignupInteraction();
+        void onAddButtonClicked();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d("demo","On activityCreated");
         lv = (ListView) getActivity().findViewById(R.id.listView);
         imageAdd = (ImageButton) getActivity().findViewById(R.id.imageAdd);
         logoutButton = (Button) getActivity().findViewById(R.id.buttonLogout);
         mAuth = FirebaseAuth.getInstance();
         expensesList = new ArrayList<Expense>();
 
-        expense = new Expense();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        userId = firebaseUser.getUid();
-        final DatabaseReference expenses = mDatabase.child("expenses");
-
-        final ExpenseListDataAdapter adapter = new ExpenseListDataAdapter(getActivity(), R.layout.item_row_layout,expensesList);
-        lv.setAdapter(adapter);
-
-        expenses.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String value = dataSnapshot.getValue(String.class);
-                //expensesList.add(expense);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        imageAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
+                mListener.onAddButtonClicked();
             }
         });
 
+        //expense = new Expense();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if(firebaseUser !=null) {
+            userId = firebaseUser.getUid();
+            final DatabaseReference expenses = mDatabase.child("expenses");
+
+            final ExpenseListDataAdapter adapter = new ExpenseListDataAdapter(getActivity(), R.layout.item_row_layout, expensesList);
+            lv.setAdapter(adapter);
+
+            expenses.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Expense expense = dataSnapshot.getValue(Expense.class);
+                    if(expense.getUser()!=null && expense.getUser().equals(mAuth.getCurrentUser().getEmail())){
+                        expensesList.add(expense);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            logoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAuth.signOut();
+                    mListener.onSignupInteraction();
+                }
+            });
+        }
     }
 }

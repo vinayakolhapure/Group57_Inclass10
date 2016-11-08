@@ -9,7 +9,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener,
-        LoginActivity.OnLoginFragmentInteractionListener, ExpensesList.OnFragmentInteractionListener {
+        LoginActivity.OnLoginFragmentInteractionListener, ExpensesList.OnFragmentInteractionListener,
+        AddFragment.OnFragmentInteractionListener{
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
@@ -58,8 +59,28 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
     public void onSignupInteraction() {
         getFragmentManager().popBackStack();
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, new ExpensesList(), "expense_list")
+                .replace(R.id.container, new LoginActivity(), "login_fragment")
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onAddButtonClicked() {
+        getFragmentManager().popBackStack();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new AddFragment(), "add_fragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onAddExpenseFragmentInteraction(Expense expense) {
+        if(expense!=null) {
+            getFragmentManager().popBackStack();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new ExpensesList(), "expense_list")
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

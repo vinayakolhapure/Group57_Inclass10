@@ -73,7 +73,6 @@ public class LoginActivity extends Fragment {
     public void onLogIn(View view){
         String email = eEmail.getText().toString();
         String pwd = ePwd.getText().toString();
-        Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
         }
